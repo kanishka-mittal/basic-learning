@@ -39,7 +39,9 @@ import de.learnlib.statistics.Counter;
 
 /**
  * General learning testing framework. All basic settings are at the top of this file and can be configured
- * by hard-coding or by simply changing them from your own code.
+ * by hard-coding or by simply changing them from your own code. Method "runSimpleExperiment" learns a model and writes
+ * it to a file. Method "runControlledExperiment" shows extra statistics and intermediate hypotheses, which you can
+ * customize.
  * 
  * Based on the learner experiment setup of Joshua Moerman, https://gitlab.science.ru.nl/moerman/Learnlib-Experiments
  * 
@@ -52,9 +54,9 @@ public class BasicLearner {
 	/**
 	 * name to give to the resulting .dot-file and .pdf-file (extensions are added automatically)
 	 */
-	public static String
+	public static String // extension .pdf is added automatically
 			FINAL_MODEL_FILENAME = "learnedModel",
-			INTERMEDIATE_HYPOTHESIS_FILENAME = "hypothesis";
+			INTERMEDIATE_HYPOTHESIS_FILENAME = "hypothesis"; // a number gets appended for every iteration
 	/**
 	 * For controlled experiments only: store every hypotheses as a file. Useful for 'debugging'
 	 * if the learner does not terminate (hint: the TTT-algorithm produces many hypotheses).
@@ -65,27 +67,28 @@ public class BasicLearner {
 	 */
 	public static double randomWalk_chanceOfResetting = 0.1;
 	/**
-	 * For random walk, the number of symbols that is tested in total (divided over multiple traces).
+	 * For random walk, the number of symbols that is tested in total (maybe with resets in between).
 	 */
 	public static int randomWalk_numberOfSymbols = 300;
 	/**
-	 * MaxDepth-parameter for W-method and Wp-method. Typically not larger than 3. Decrease for quicker runs.
+	 * MaxDepth-parameter for W-method and Wp-method. This acts as the parameter 'n' for an n-complete test suite.
+	 * Typically not larger than 3. Decrease for quicker runs.
 	 */
 	public static int w_wp_methods_maxDepth = 2;
 
-	//*****************************************//
-	// Predefined learning and testing methods //
-	//*****************************************//
+	//********************************************//
+	// Predefined learning and testing algorithms //
+	//********************************************//
 	/**
 	 * The learning algorithms. LStar is the basic algorithm, TTT performs much faster
-	 * but is a bit more inaccurate and produces more intermediate hypotheses, so test well)
+	 * but is a bit more inaccurate and produces more intermediate hypotheses, so test well.
 	 */
 	public enum LearningMethod { LStar, RivestSchapire, TTT, KearnsVazirani }
 	/**
-	 * The testing algorithms. Random walk is the simplest, but performs badly on large models:
-	 * the chance of hitting a erroneous long trace is very small. WMethod and WpMethod are
-	 * smarter. UserQueries asks the user for which inputs to try as counter-example: have a
-	 * look at the hypothesis, and try to think of one
+	 * The testing algorithms. Random walk is the simplest, but may perform badly on large models:
+	 * the chance of hitting a hard-to-reach transition is very small. WMethod and WpMethod are
+	 * smarter. With UserQueries, the user acts as equivalence oracle: have a look at the hypothesis,
+	 * and try to think of one.
 	 */
 	public enum TestingMethod { RandomWalk, WMethod, WpMethod, UserQueries }
 
@@ -123,6 +126,9 @@ public class BasicLearner {
 		}
 	}
 
+	//**********************************************//
+	// Methods to start the actual learning process //
+	//**********************************************//
 	/**
 	 * Simple example of running a learning experiment
 	 * @param learner Learning algorithm, wrapping the SUL
@@ -180,7 +186,7 @@ public class BasicLearner {
 			int stage = 0;
 			long lastNrResetsValue = 0, lastNrSymbolsValue = 0;
 			
-			// start the actual learning
+			// learn the first hypothesis
 			learner.startLearning();
 			
 			while(true) {
@@ -252,6 +258,9 @@ public class BasicLearner {
 		runControlledExperiment(learningSetup.learner, learningSetup.eqOracle, learningSetup.nrSymbols, learningSetup.nrResets, learnlibAlphabet);
 	}
 
+	//************************//
+	// Some auxiliary methods //
+	//************************//
 	/**
 	 * Produces a dot-file and a PDF (if graphviz is installed)
 	 * @param fileName filename without extension - will be used for the .dot and .pdf
@@ -265,7 +274,9 @@ public class BasicLearner {
 		PrintWriter dotWriter = new PrintWriter(fileName + ".dot");
 		GraphDOT.write(model, alphabet, dotWriter);
 		try {
-			DOT.runDOT(new File(fileName + ".dot"), "pdf", new File(fileName + ".pdf"));
+			File file = new File(fileName + ".dot");
+			DOT.runDOT(file, "pdf", new File(fileName + ".pdf"));
+			System.out.println("result written to " + file.getAbsolutePath());
 		} catch (Exception e) {
 			if (verboseError) {
 				System.err.println("Warning: Install graphviz to convert dot-files to PDF");
