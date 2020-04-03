@@ -9,9 +9,14 @@ The project contains two SUL-interfaces: an example in Java-code, and a socket-w
 
 ## LearnLib version
 
-This repo contains precompiled jars of the LearnLib library, which are more
+This repo contains precompiled jars of the LearnLib library, which, at the moment of adding, are more
 recent than the ones in Maven (and include important bug fixes). Both LearnLib
 and AutomataLib are compiled into a single jar. Compiled with Java 1.8.
 
 * Learnlib version: [22 aug 2016](https://github.com/LearnLib/learnlib/commit/78417b85f771d0a2cf4498567a9190f03a5978d0)
 * Automatalib version: [18 sept 2015](https://github.com/misberner/automatalib/commit/601e6fe105c3366b0706f8f2984873a67bf13e69)
+
+## Licencing
+
+Feel free to use this software for any intents or purposes.
+
