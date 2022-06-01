@@ -1,4 +1,4 @@
-package basiclearner;
+package se.uu.it.basiclearning;
 
 import java.util.HashMap;
 import java.util.LinkedList;

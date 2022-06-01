@@ -1,9 +1,9 @@
-package basiclearner;
+package se.uu.it.basiclearning;
 
-import de.learnlib.api.EquivalenceOracle;
 import de.learnlib.api.SUL;
-import de.learnlib.oracles.DefaultQuery;
-import net.automatalib.automata.transout.MealyMachine;
+import de.learnlib.api.oracle.EquivalenceOracle;
+import de.learnlib.api.query.DefaultQuery;
+import net.automatalib.automata.transducers.MealyMachine;
 import net.automatalib.words.Word;
 import net.automatalib.words.impl.Symbol;
 

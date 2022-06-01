@@ -1,41 +1,43 @@
-package basiclearner;
+package se.uu.it.basiclearning;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Random;
-
-import net.automatalib.automata.transout.MealyMachine;
-import net.automatalib.commons.dotutil.DOT;
-import net.automatalib.util.graphs.dot.GraphDOT;
-import net.automatalib.words.Alphabet;
-import net.automatalib.words.Word;
-import net.automatalib.words.impl.SimpleAlphabet;
 
 import com.google.common.collect.Lists;
 
 import de.learnlib.acex.analyzers.AcexAnalyzers;
 import de.learnlib.algorithms.kv.mealy.KearnsVaziraniMealy;
-import de.learnlib.algorithms.lstargeneric.ce.ObservationTableCEXHandlers;
-import de.learnlib.algorithms.lstargeneric.closing.ClosingStrategies;
-import de.learnlib.algorithms.lstargeneric.mealy.ExtensibleLStarMealy;
+import de.learnlib.algorithms.lstar.ce.ObservationTableCEXHandlers;
+import de.learnlib.algorithms.lstar.closing.ClosingStrategies;
+import de.learnlib.algorithms.lstar.mealy.ExtensibleLStarMealy;
 import de.learnlib.algorithms.ttt.mealy.TTTLearnerMealy;
-import de.learnlib.api.EquivalenceOracle;
-import de.learnlib.api.LearningAlgorithm;
-import de.learnlib.api.MembershipOracle.MealyMembershipOracle;
 import de.learnlib.api.SUL;
-import de.learnlib.eqtests.basic.WMethodEQOracle;
-import de.learnlib.eqtests.basic.WpMethodEQOracle;
-import de.learnlib.eqtests.basic.mealy.RandomWalkEQOracle;
-import de.learnlib.experiments.Experiment.MealyExperiment;
-import de.learnlib.oracles.DefaultQuery;
-import de.learnlib.oracles.ResetCounterSUL;
-import de.learnlib.oracles.SULOracle;
-import de.learnlib.oracles.SymbolCounterSUL;
-import de.learnlib.statistics.Counter;
+import de.learnlib.api.algorithm.LearningAlgorithm;
+import de.learnlib.api.oracle.EquivalenceOracle;
+import de.learnlib.api.oracle.MembershipOracle.MealyMembershipOracle;
+import de.learnlib.api.query.DefaultQuery;
+import de.learnlib.filter.statistic.Counter;
+import de.learnlib.filter.statistic.sul.ResetCounterSUL;
+import de.learnlib.filter.statistic.sul.SymbolCounterSUL;
+import de.learnlib.oracle.equivalence.MealyWMethodEQOracle;
+import de.learnlib.oracle.equivalence.MealyWpMethodEQOracle;
+import de.learnlib.oracle.equivalence.WMethodEQOracle;
+import de.learnlib.oracle.equivalence.WpMethodEQOracle;
+import de.learnlib.oracle.equivalence.mealy.RandomWalkEQOracle;
+import de.learnlib.oracle.membership.SULOracle;
+import de.learnlib.util.Experiment.MealyExperiment;
+import net.automatalib.automata.transducers.MealyMachine;
+import net.automatalib.serialization.dot.GraphDOT;
+import net.automatalib.visualization.dot.DOT;
+import net.automatalib.words.Alphabet;
+import net.automatalib.words.Word;
+import net.automatalib.words.impl.ListAlphabet;
 
 /**
  * General learning testing framework. All basic settings are at the top of this file and can be configured
@@ -113,12 +115,12 @@ public class BasicLearner {
 		switch (testMethod){
 			// simplest method, but doesn't perform well in practice, especially for large models
 			case RandomWalk:
-				return new RandomWalkEQOracle<>(randomWalk_chanceOfResetting, randomWalk_numberOfSymbols, true, new Random(123456l), sul);
+				return new RandomWalkEQOracle<>(sul, randomWalk_chanceOfResetting, randomWalk_numberOfSymbols, true, new Random(123456l));
 			// Other methods are somewhat smarter than random testing: state coverage, trying to distinguish states, etc.
 			case WMethod:
-				return new WMethodEQOracle.MealyWMethodEQOracle<>(w_wp_methods_maxDepth, sulOracle);
+				return new MealyWMethodEQOracle<>(sulOracle, w_wp_methods_maxDepth);
 			case WpMethod:
-				return new WpMethodEQOracle.MealyWpMethodEQOracle<>(w_wp_methods_maxDepth, sulOracle);
+				return new MealyWpMethodEQOracle<>(sulOracle, w_wp_methods_maxDepth);
 			case UserQueries:
 				return new UserEQOracle(sul);
 			default:
@@ -161,7 +163,7 @@ public class BasicLearner {
 			TestingMethod testingMethod,
 			Collection<String> alphabet
 			) throws IOException {
-		Alphabet<String> learlibAlphabet = new SimpleAlphabet<String>(alphabet);
+		Alphabet<String> learlibAlphabet = new ListAlphabet<String>(new ArrayList<>(alphabet));
 		LearningSetup learningSetup = new LearningSetup(sul, learningMethod, testingMethod, learlibAlphabet);
 		runSimpleExperiment(learningSetup.learner, learningSetup.eqOracle, learlibAlphabet);
 	}
@@ -253,7 +255,7 @@ public class BasicLearner {
 			TestingMethod testingMethod,
 			Collection<String> alphabet
 		) throws IOException {
-		Alphabet<String> learnlibAlphabet = new SimpleAlphabet<String>(alphabet);
+		Alphabet<String> learnlibAlphabet = new ListAlphabet<String>(new ArrayList<>(alphabet));
 		LearningSetup learningSetup = new LearningSetup(sul, learningMethod, testingMethod, learnlibAlphabet);
 		runControlledExperiment(learningSetup.learner, learningSetup.eqOracle, learningSetup.nrSymbols, learningSetup.nrResets, learnlibAlphabet);
 	}

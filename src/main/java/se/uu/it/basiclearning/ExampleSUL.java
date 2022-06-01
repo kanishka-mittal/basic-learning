@@ -1,7 +1,7 @@
-package basiclearner;
+package se.uu.it.basiclearning;
 
 import de.learnlib.api.SUL;
-import de.learnlib.api.SULException;
+import de.learnlib.api.exception.SULException;
 
 /**
  * Example of a three-state system, hard-coded.

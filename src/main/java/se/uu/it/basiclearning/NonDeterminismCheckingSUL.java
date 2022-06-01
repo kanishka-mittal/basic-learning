@@ -1,10 +1,10 @@
-package basiclearner;
+package se.uu.it.basiclearning;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.learnlib.api.SUL;
-import de.learnlib.api.SULException;
+import de.learnlib.api.exception.SULException;
 
 /**
  * SUL-wrapper to check for non-determinism, by use of an observation tree.
