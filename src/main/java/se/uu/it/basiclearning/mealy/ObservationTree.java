@@ -1,4 +1,4 @@
-package se.uu.it.basiclearning;
+package se.uu.it.basiclearning.mealy;
 
 import java.util.HashMap;
 import java.util.LinkedList;

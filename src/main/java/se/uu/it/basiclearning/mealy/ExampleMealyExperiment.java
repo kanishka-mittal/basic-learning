@@ -1,15 +1,17 @@
-package se.uu.it.basiclearning;
-
-import com.google.common.collect.ImmutableSet;
-import de.learnlib.api.SUL;
+package se.uu.it.basiclearning.mealy;
 
 import java.io.IOException;
 import java.util.Collection;
 
+import com.google.common.collect.ImmutableSet;
+
+import de.learnlib.api.SUL;
+import se.uu.it.basiclearning.LearnerConfig;
+
 /**
  * Created by ramon on 13-12-16.
  */
-public class ExampleExperiment {
+public class ExampleMealyExperiment {
     /**
      * Example of how to call a learner in a simple way with this class. Learns the ExampleSUL.
      * @param args
@@ -26,8 +28,9 @@ public class ExampleExperiment {
         Collection<String> inputAlphabet = ImmutableSet.of("a", "b", "c");
 
         try {
-            // runControlledExperiment for detailed statistics, runSimpleExperiment for just the result
-            BasicLearner.runControlledExperiment(sul, BasicLearner.LearningMethod.LStar, BasicLearner.TestingMethod.RandomWalk, inputAlphabet);
+        	LearnerConfig config = new LearnerConfig();
+        	MealyLearner<String, String> learner = new MealyLearner<String, String>(config, sul);
+        	learner.runExperiment(inputAlphabet);
         } finally {
             if (sul instanceof AutoCloseable) {
                 try {
