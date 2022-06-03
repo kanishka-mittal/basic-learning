@@ -67,7 +67,7 @@ public class MealyLearner<I, O> extends BasicLearner<I, Word<O>, MealyMachine<?,
 		// Other methods are somewhat smarter than random testing: state coverage,
 		// trying to distinguish states, etc.
 		case RandomWpMethod:
-			return new RandomWpMethodEQOracle<>(sulOracle, config.getMinSize(), config.getRandLength(), config.getMaxSymbols());
+			return new RandomWpMethodEQOracle<>(sulOracle, config.getMinSize(), config.getRandLength(), config.getMaxTests());
 		case WMethod:
 			return new MealyWMethodEQOracle<>(sulOracle, config.getMaxDepth());
 		case WpMethod:

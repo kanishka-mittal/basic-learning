@@ -12,28 +12,32 @@ public class LearnerConfig {
 	private double resetProbability = 0.1;
 	
 	/**
-	 * For random walk and Random-Wp, the number of symbols that is tested in total (maybe with resets in between).
+	 * For random walk, the number of symbols that is tested in total (maybe with resets in between).
 	 */
-	@Parameter(names={"-maxSymbols"}, description = "For random walk and Random-Wp, the number of symbols that is tested in total (maybe with resets in between).")
+	@Parameter(names={"-maxSymbols"}, description = "For random walk, the number of symbols that is tested in total (maybe with resets in between).")
 	private int maxSymbols = 1000;
 	
 	/**
 	 * MaxDepth-parameter for W-method and Wp-method. This acts as the parameter 'n' for an n-complete test suite.
 	 * Typically not larger than 3. Decrease for quicker runs.
 	 */
-	@Parameter(names={"-maxDepth"}, description = "MaxDepth-parameter for W-method and Wp-method.")
+	@Parameter(names={"-maxDepth"}, description = "MaxDepth-parameter for W and Wp methods.")
 	private int maxDepth = 2;
 	
 	/**
 	 * Minimum size of test query for Random-Wp method.
 	 */
-	@Parameter(names={"-minSize"}, description = "Minimum size of test query for Random Wp-method.")
+	@Parameter(names={"-minSize"}, description = "Minimum size of test query for RandomWp method.")
 	private int minSize = 5;
+	
+	
+	@Parameter(names={"-maxTests"}, description = "Maximum number of tests used in total for RandomWp method.")
+	private int maxTests = 1000;
 	
 	/**
 	 * Maximum size of test query for Random Wp-method. 
 	 */
-	@Parameter(names={"-randLength"}, description = "Minimum size of test query for Random Wp-method.")
+	@Parameter(names={"-randLength"}, description = "Minimum size of test query for RandomWp method.")
 	private int randLength = 20;
 	
 	/**
@@ -132,6 +136,10 @@ public class LearnerConfig {
 	
 	public boolean isHelp() {
 		return help;
+	}
+
+	public int getMaxTests() {
+		return maxTests;
 	}
 
 }
