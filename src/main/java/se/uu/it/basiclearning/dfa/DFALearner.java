@@ -61,7 +61,7 @@ public class DFALearner<I> extends BasicLearner<I, Boolean, DFA<?, I>> {
 		case WpMethod:
 			return new DFAWpMethodEQOracle<>(sulOracle, config.getMaxDepth());
 		case RandomWpMethod:
-			return new RandomWpMethodEQOracle<>(sulOracle, config.getMinSize(), config.getRandLength(), config.getMaxSymbols());
+			return new RandomWpMethodEQOracle<>(sulOracle, config.getMinSize(), config.getRandLength(), config.getMaxTests());
 		default:
 			throw new RuntimeException("Tester not supported for this method");
 		}
