@@ -1,50 +1,67 @@
 package se.uu.it.basiclearning;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+
+@Parameters(commandDescription = "Learns an automaton")
 public class LearnerConfig {
 	/**
 	 * For random walk, the chance to reset after every input
 	 */
+	@Parameter(names={"-resetProbability"}, description = "For random walk, the chance to reset after every input")
 	private double resetProbability = 0.1;
 	
 	/**
 	 * For random walk and Random-Wp, the number of symbols that is tested in total (maybe with resets in between).
 	 */
+	@Parameter(names={"-maxSymbols"}, description = "For random walk and Random-Wp, the number of symbols that is tested in total (maybe with resets in between).")
 	private int maxSymbols = 1000;
 	
 	/**
 	 * MaxDepth-parameter for W-method and Wp-method. This acts as the parameter 'n' for an n-complete test suite.
 	 * Typically not larger than 3. Decrease for quicker runs.
 	 */
+	@Parameter(names={"-maxDepth"}, description = "MaxDepth-parameter for W-method and Wp-method.")
 	private int maxDepth = 2;
 	
 	/**
-	 * minimum size of test query for Random Wp-method 
+	 * Minimum size of test query for Random-Wp method.
 	 */
+	@Parameter(names={"-minSize"}, description = "Minimum size of test query for Random Wp-method.")
 	private int minSize = 5;
 	
 	/**
-	 * maximum size of test query for Random Wp-method 
+	 * Maximum size of test query for Random Wp-method. 
 	 */
+	@Parameter(names={"-randLength"}, description = "Minimum size of test query for Random Wp-method.")
 	private int randLength = 20;
 	
 	/**
 	 * Output directory where to store learned model and intermediary hypotheses.
 	 */
+	@Parameter(names={"-outputDir"}, description = "Output directory where to store learned model and intermediary hypotheses.")
 	public String outputDir = "output";
 	
 	/**
 	 * Random seed to use.
 	 */
+	@Parameter(names={"-seed"}, description = "Random seed to use.")
 	private long seed = 0;
 	
 	/**
-	 * Learning method to use
+	 * Learning method to use.
 	 */
+	@Parameter(names={"-learningMethod"}, description = "Learning method")
 	private LearningMethod learningMethod = LearningMethod.TTT;
 	
+	@Parameter(names={"-help", "-h"}, description = "Prints usage bage")
+	private boolean help = false;
+	
+
 	/**
-	 * Testing method to use
+	 * Testing method to use.
 	 */
+	@Parameter(names={"-testingMethod"}, description = "Testing method")
 	private TestingMethod testingMethod = TestingMethod.RandomWpMethod;
 	
 	public void setResetProbability(double resetProbability) {
@@ -111,6 +128,10 @@ public class LearnerConfig {
 
 	public int getRandLength() {
 		return randLength;
+	}
+	
+	public boolean isHelp() {
+		return help;
 	}
 
 }

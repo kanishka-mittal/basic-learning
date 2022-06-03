@@ -3,17 +3,20 @@ package se.uu.it.basiclearning.mealy;
 import java.io.IOException;
 import java.util.Collection;
 
+import com.beust.jcommander.JCommander;
 import com.google.common.collect.ImmutableSet;
 
 import de.learnlib.api.SUL;
 import se.uu.it.basiclearning.LearnerConfig;
 
 /**
- * Created by ramon on 13-12-16.
+ * Created by ramon on 13-12-16. Adapter by pfg666 some time later.
  */
 public class ExampleMealyExperiment {
     /**
      * Example of how to call a learner in a simple way with this class. Learns the ExampleSUL.
+     * Supply the option "-h" to show usage page.
+     * 
      * @param args
      * @throws IOException
      */
@@ -29,8 +32,14 @@ public class ExampleMealyExperiment {
 
         try {
         	LearnerConfig config = new LearnerConfig();
-        	MealyLearner<String, String> learner = new MealyLearner<String, String>(config, sul);
-        	learner.runExperiment(inputAlphabet);
+            JCommander commander = new JCommander(config);
+            commander.parse(args);
+            if (config.isHelp()) {
+            	commander.usage();
+            } else {
+            	MealyLearner<String, String> learner = new MealyLearner<String, String>(config, sul);
+            	learner.runExperiment(inputAlphabet);
+            }
         } finally {
             if (sul instanceof AutoCloseable) {
                 try {
