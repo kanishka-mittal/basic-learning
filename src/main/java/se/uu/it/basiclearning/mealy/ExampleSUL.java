@@ -1,4 +1,4 @@
-package se.uu.it.basiclearning;
+package se.uu.it.basiclearning.mealy;
 
 import de.learnlib.api.SUL;
 import de.learnlib.api.exception.SULException;
